@@ -1,0 +1,118 @@
+import React from 'react';
+import styled from 'styled-components';
+
+interface VolunteerAttribute {
+  id: string;
+  name: string;
+  description: string;
+  classificationType: string;
+  formattedDetails: string;
+}
+
+interface Props {
+  isLoading: boolean;
+  rows: VolunteerAttribute[];
+  sortBy?: string;
+  onClickRow?: (attribute: VolunteerAttribute) => void;
+  onChangeSort: (column: string) => void;
+}
+
+const PageTable: React.FC<Props> = ({
+  isLoading,
+  rows,
+  sortBy,
+  onClickRow,
+  onChangeSort,
+}) => {
+  return (
+    <PageTableStyle noBorder>
+      <StyledTable className="table table-striped table-separated mb-0">
+        <thead>
+          <tr>
+            <Th onClick={() => onChangeSort('name')} sortOrder={sortBy === 'name' ? 'asc' : 'desc'}>
+              Project Name
+            </Th>
+            <Th onClick={() => onChangeSort('study')} sortOrder={sortBy === 'study' ? 'asc' : 'desc'}>
+              Study Group
+            </Th>
+            <Th onClick={() => onChangeSort('hardware')} sortOrder={sortBy === 'hardware' ? 'asc' : 'desc'}>
+              Hardware
+            </Th>
+            <Th onClick={() => onChangeSort('target')} sortOrder={sortBy === 'target' ? 'asc' : 'desc'}>
+              Target
+            </Th>
+            <Th onClick={() => onChangeSort('end_date')} sortOrder={sortBy === 'end_date' ? 'asc' : 'desc'}>
+              End Date
+            </Th>
+            <Th onClick={() => onChangeSort('start_date')} sortOrder={sortBy === 'start_date' ? 'asc' : 'desc'}>
+              Start Date
+            </Th>
+            <Th onClick={() => onChangeSort('volunteer')} sortOrder={sortBy === 'volunteer' ? 'asc' : 'desc'}>
+              Volunteer
+            </Th>
+            <Th onClick={() => onChangeSort('type')} sortOrder={sortBy === 'type' ? 'asc' : 'desc'}>
+              Type
+            </Th>
+            <Th onClick={() => onChangeSort('description')} sortOrder={sortBy === 'description' ? 'asc' : 'desc'}>
+              Description
+            </Th>
+          </tr>
+        </thead>
+        <tbody>
+          {isLoading ? (
+            <tr>
+              <td colSpan={9}>Loading...</td>
+            </tr>
+          ) : rows.length ? (
+            rows.map((row) => (
+              <TableRow key={row.id} onClick={() => onClickRow && onClickRow(row)}>
+                <Td>{row.name}</Td>
+                <Td>{row.description}</Td>
+                <Td>{row.classificationType}</Td>
+                <Td>{row.formattedDetails}</Td>
+                <Td>{row.id}</Td>
+              </TableRow>
+            ))
+          ) : (
+            <tr>
+              <td colSpan={9}>No records found.</td>
+            </tr>
+          )}
+        </tbody>
+      </StyledTable>
+    </PageTableStyle>
+  );
+};
+
+const PageTableStyle = styled.div`
+  max-height: 30rem;
+  overflow-y: scroll;
+`;
+
+const StyledTable = styled.table`
+  width: 100%;
+  font-size: 1rem;
+  border-collapse: separate;
+  border-spacing: 0;
+`;
+
+const Th = styled.th`
+  color: #fff;
+  text-transform: uppercase;
+  background-color: #838eac;
+  white-space: nowrap;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+`;
+
+const Td = styled.td`
+  padding: 0.5rem 1rem;
+`;
+
+const TableRow = styled.tr`
+  &:nth-child(even) {
+    background-color: #eee;
+  }
+`;
+
+export default PageTable;
